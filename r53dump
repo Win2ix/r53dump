@@ -1,0 +1,76 @@
+#!/bin/bash
+#
+# r53dump
+# Copyright 2013 Ryan Babchishin <rbabchishin@win2ix.ca> http://www.win2ix.ca
+# version = '0.1';
+
+#begin GPL
+#    This file is part of r53dump.
+#
+#    r53dump is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, version 3 of the License.
+#
+#    r53dump is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with r53dump.  If not, see <http://www.gnu.org/licenses/>.
+#end GPL
+
+
+globalConfig=/etc/r53dump.conf
+authConfigFile=$1
+saveDirectory=$2
+error=0
+
+# Print and log arg1
+_log () {
+	echo $1
+	logger -t r53dump "$1"	
+}
+
+echo "Loading $globalConfig";
+source $globalConfig
+if [[ $? -ne 0 ]]; then {
+	_log "globalConfig: Failed to load $globalConfig"
+	exit;
+} fi
+
+if [[ ! -f $authConfigFile ]]; then {
+	_log "authConfigFile: Not a file: $authConfigFile"
+	error=1
+} fi
+
+if [[ ! -d $saveDirectory ]]; then {
+	_log "saveDirectory: Not a directory: $saveDirectory"
+	error=1
+} fi
+
+if [[ $error -eq 1 ]]; then {
+	_log "Syntax error"
+	echo "Usage: $0 authConfigFile saveDirectory"
+	echo "Example:"
+	echo " $0 aws.conf /home/me/archive"
+	exit 255;
+} fi
+
+source $authConfigFile
+zones=$($cli53 list | grep ' Name: ' | cut -d: -f2 | sed "s/ //g")
+
+IFS="
+"
+
+date=$(date +%Y%m%d)
+
+for zone in $zones ; do {
+	echo "Downloading $zone"
+	$cli53 export $zone > $saveDirectory/$zone${date}	
+	if [ -n "$s3bucket" ]; then {
+		$s3cmd put $saveDirectory/$zone${date} $s3bucket/
+	}; fi
+} done
+
+
