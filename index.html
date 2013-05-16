@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="R53dump : r53dump" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>R53dump</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Win2ix/r53dump">View on GitHub</a>
+
+          <h1 id="project_title">R53dump</h1>
+          <h2 id="project_tagline">r53dump</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/Win2ix/r53dump/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/Win2ix/r53dump/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>r53dump - Route53 Dump README</p>
+
+<p>Ryan Babchishin <a href="mailto:rbabchishin@win2ix.ca">rbabchishin@win2ix.ca</a> 
+Win2ix Systems Inc. <a href="http://www.win2ix.ca">http://www.win2ix.ca</a></p>
+
+<p>r53dump will connect to AWS Route53 service and dump all zones in Bind format for the specified account.
+Logging is done to syslog (check /var/log/syslog). Multiple accounts, multilpe zones are supported. "cli53" is
+used for all connectivity with AWS systems. Dumped zones can optionally be sent to s3 automatically.</p>
+
+<p>Usage/Setup:</p>
+
+<p>1) Install cli53 <a href="https://github.com/barnybug/cli53.git">https://github.com/barnybug/cli53.git</a></p>
+
+<p>2) Install s3cmd (available via apt-get)</p>
+
+<p>3) Create /etc/r53dump.conf and add this (or copy a working one):</p>
+
+<p>cli53=/usr/local/bin/cli53
+s3cmd=s3cmd
+s3bucket="s3://your-bucket"</p>
+
+<p>4) Set your AWS access keys in one file per account (like win2ix.auth). You can have more than one.
+The format is like this:</p>
+
+<p>export AWS_ACCESS_KEY_ID=AKIAJGNWBPJJKSWCHEMZ
+export AWS_SECRET_ACCESS_KEY='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'</p>
+
+<p>4) Start r53dump</p>
+
+<p>./r53dump authConfigFile saveDirectory</p>
+
+<p>authConfigFile = the file created in step 4
+saveDirectory = a directory to store downloaded zone files</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">R53dump maintained by <a href="https://github.com/Win2ix">Win2ix</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
