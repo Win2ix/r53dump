@@ -58,7 +58,7 @@ if [[ $error -eq 1 ]]; then {
 } fi
 
 source $authConfigFile
-zones=$($cli53 list | grep ' Name: ' | cut -d: -f2 | sed "s/ //g")
+zones=$($cli53 list 2>&1 | grep ' Name: ' | cut -d: -f2 | sed "s/ //g")
 
 IFS="
 "
