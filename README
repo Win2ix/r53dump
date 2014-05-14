@@ -28,7 +28,7 @@ export AWS_ACCESS_KEY_ID=AKIAJGNWBPJJKSWCHEMZ
 export AWS_SECRET_ACCESS_KEY='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'
 
 
-4) Start r53dump
+5) Start r53dump
 
 ./r53dump authConfigFile saveDirectory
 
